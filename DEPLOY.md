@@ -28,6 +28,12 @@ chmod +x deploy/*.sh
 ./deploy/install_systemd.sh <tu_usuario_linux>
 ```
 
+El instalador detecta el gestor de paquetes automáticamente:
+
+- Debian/Ubuntu: `apt-get`
+- Arch: `pacman`
+- Fedora: `dnf`
+
 Ejemplo:
 
 ```bash

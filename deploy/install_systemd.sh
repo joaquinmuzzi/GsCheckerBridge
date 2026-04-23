@@ -10,10 +10,34 @@ TARGET_USER="$1"
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET_DIR="/opt/gscheckerbridge"
 
-echo "Installing dependencies (nodejs/npm + localtunnel) ..."
-sudo apt-get update
-sudo apt-get install -y nodejs npm python3-venv
-sudo npm i -g localtunnel
+install_deps() {
+    echo "Installing dependencies (nodejs/npm + localtunnel) ..."
+
+    if command -v apt-get >/dev/null 2>&1; then
+        sudo apt-get update
+        sudo apt-get install -y nodejs npm python3-venv rsync
+        sudo npm i -g localtunnel
+        return
+    fi
+
+    if command -v pacman >/dev/null 2>&1; then
+        sudo pacman -Sy --noconfirm --needed nodejs npm python rsync
+        sudo npm i -g localtunnel
+        return
+    fi
+
+    if command -v dnf >/dev/null 2>&1; then
+        sudo dnf install -y nodejs npm python3 rsync
+        sudo npm i -g localtunnel
+        return
+    fi
+
+    echo "ERROR: unsupported distro/package manager."
+    echo "Install manually: nodejs npm python(venv) rsync + npm i -g localtunnel"
+    exit 1
+}
+
+install_deps
 
 echo "Syncing repository to $TARGET_DIR ..."
 sudo mkdir -p "$TARGET_DIR"
