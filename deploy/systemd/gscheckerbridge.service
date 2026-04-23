@@ -1,0 +1,16 @@
+[Unit]
+Description=GsChecker Warmane Bridge (FastAPI + DrissionPage)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/gscheckerbridge
+ExecStart=/opt/gscheckerbridge/deploy/start_bridge.sh
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

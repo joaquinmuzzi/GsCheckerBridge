@@ -1,0 +1,15 @@
+[Unit]
+Description=GsChecker Bridge LocalTunnel
+After=network-online.target gscheckerbridge@%i.service
+Wants=network-online.target gscheckerbridge@%i.service
+
+[Service]
+Type=simple
+User=%i
+WorkingDirectory=/opt/gscheckerbridge
+ExecStart=/opt/gscheckerbridge/deploy/start_localtunnel.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
