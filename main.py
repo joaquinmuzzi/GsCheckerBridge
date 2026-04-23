@@ -20,6 +20,13 @@ def get_browser():
         # Intentar ocultar rastro de automatización
         co.set_argument('--disable-blink-features=AutomationControlled')
         co.set_user_data_path('/tmp/warmane_persistent_session')
+        
+        # Configurar modo headless/headed
+        headless = os.getenv("BRIDGE_HEADLESS", "true").lower() in ("true", "1", "yes")
+        if not headless:
+            print("⚠️  Modo HEADED activado - se abrirá ventana de navegador visible")
+            co.headless(False)
+        
         _global_browser = ChromiumPage(co)
     return _global_browser
 
