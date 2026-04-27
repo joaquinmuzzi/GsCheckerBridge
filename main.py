@@ -317,8 +317,19 @@ async def get_character_profile(
     wait_selector: str = Query("body"), 
     _=Depends(verify_api_key)
 ):
-    url = f"https://armory.warmane.com/character/{name}/{realm}/profile"
-    return await scrape_url(url, wait_selector)
+    primary_url = f"https://armory.warmane.com/character/{name}/{realm}/profile"
+    fallback_url = f"https://armory.warmane.com/character/{name}/{realm}"
+
+    try:
+        return await scrape_url(primary_url, wait_selector)
+    except HTTPException as exc:
+        logger.warning(
+            "Primary character path failed (%s/%s): %s. Retrying with base character URL.",
+            name,
+            realm,
+            getattr(exc, "detail", "unknown"),
+        )
+        return await scrape_url(fallback_url, wait_selector)
 
 @app.get("/get_char_achievements/{realm}/{name}")
 async def get_char_achievements(
