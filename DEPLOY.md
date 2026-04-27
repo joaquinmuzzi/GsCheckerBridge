@@ -45,6 +45,28 @@ Esto instala y habilita:
 - `gscheckerbridge@<user>.service`
 - `gscheckerbridge-localtunnel@<user>.service`
 
+### Arch Linux: instalar tambien el bot GsChecker como servicio 24/7
+
+Si en la misma PC queres dejar el bot como servicio de fondo:
+
+```bash
+chmod +x deploy/install_gschecker_bot_arch.sh
+./deploy/install_gschecker_bot_arch.sh <tu_usuario_linux> <ruta_absoluta_a_GsChecker> [service-name]
+```
+
+Ejemplo:
+
+```bash
+./deploy/install_gschecker_bot_arch.sh muzzi /home/muzzi/repos/wow/GsChecker gscheckerbot
+```
+
+Esto:
+
+- verifica/crea `.env` del bot,
+- prepara el `venv` y dependencias,
+- crea `/etc/systemd/system/gscheckerbot.service`,
+- habilita y arranca el servicio con `Restart=always`.
+
 ## 3) Ver logs / estado
 
 ```bash

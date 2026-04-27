@@ -20,5 +20,16 @@ python -m pip install -r requirements.txt >/dev/null
 
 export API_SECRET="${BRIDGE_SHARED_SECRET:-${API_SECRET:-secreto123}}"
 export BRIDGE_PORT="${BRIDGE_PORT:-8000}"
+export BRIDGE_HEADLESS="${BRIDGE_HEADLESS:-true}"
+export USE_XVFB="${USE_XVFB:-false}"
+
+if [[ "${USE_XVFB,,}" == "true" || "${USE_XVFB}" == "1" ]]; then
+    if command -v xvfb-run >/dev/null 2>&1; then
+        export BRIDGE_HEADLESS=false
+        exec xvfb-run -a -s "-screen 0 1920x1080x24" python main.py
+    else
+        export BRIDGE_HEADLESS=true
+    fi
+fi
 
 exec python main.py
